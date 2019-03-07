@@ -63,7 +63,7 @@ namespace server.Controllers
 		[HttpPost("{id}/answer")]
 		public ActionResult AddAnswerAsync(Guid id, [FromBody]Answer answer)
 		{
-			var question = questions.SingleOrDefault(t=>t.Id == id);
+			var question = questions.SingleOrDefault(t => t.Id == id);
 			if (question == null)
 			{
 				return NotFound();
@@ -79,13 +79,28 @@ namespace server.Controllers
 		[HttpPatch("{id}/upvote")]
 		public ActionResult UpvoteQuestionAsync(Guid id)
 		{
-			var question = questions.SingleOrDefault(t=>t.Id == id);
-			if (question == null){
+			var question = questions.SingleOrDefault(t => t.Id == id);
+			if (question == null)
+			{
 				return NotFound();
 			}
 
 			// TODO should be interlocked instead
 			question.Score++;
+			return new JsonResult(question);
+		}
+
+		[HttpPatch("{id}/downvote")]
+		public ActionResult DownvoteQuestionAsync(Guid id)
+		{
+			var question = questions.SingleOrDefault(t => t.Id == id);
+			if (question == null)
+			{
+				return NotFound();
+			}
+
+			// TODO should be interlocked instead
+			question.Score--;
 			return new JsonResult(question);
 		}
 	}
